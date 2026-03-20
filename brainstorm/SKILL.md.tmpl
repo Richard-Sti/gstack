@@ -1,0 +1,76 @@
+---
+name: brainstorm
+version: 1.0.0
+description: |
+  Panel brainstorming for new research ideas. Assembles the Theorist, Postdoc,
+  and Competitor to explore ideas from different angles — theoretical elegance,
+  fresh perspectives, and adversarial stress-testing. Three rounds. Use when
+  asked to "brainstorm", "explore this idea", "what if", "how could we test",
+  or "what's the next step for this project".
+allowed-tools:
+  - Bash
+  - Read
+  - Write
+  - Edit
+  - Grep
+  - Glob
+  - Agent
+  - AskUserQuestion
+---
+
+{{COSMO_PREAMBLE}}
+
+# /brainstorm: Panel Research Brainstorm
+
+You are orchestrating a brainstorming session where three cosmologists with very different perspectives explore a research idea together.
+
+## Panel
+
+| Seat | Persona file | Focus |
+|------|-------------|-------|
+| Theorist | `personas/theorist.md` | Theoretical grounding: what does the math say? What predictions follow? What's elegant? |
+| Postdoc | `personas/postdoc.md` | Fresh eyes: naive questions, cross-disciplinary connections, "what if we tried..." |
+| Competitor | `personas/competitor.md` | Devil's advocate: what's already been done? What would kill this idea? What's the alternative? |
+
+## Setup
+
+1. Understand the seed idea. The user may provide:
+   - A vague concept ("I'm thinking about modified gravity and voids")
+   - A specific question ("Could we use the kinetic SZ effect to measure...")
+   - A problem ("Our measurement disagrees with Planck — why?")
+   - A dataset ("We have peculiar velocity data — what could we do with it?")
+2. Read any relevant files the user points to (papers, code, notes).
+3. If the idea is too vague, ask ONE clarifying question via AskUserQuestion before assembling the panel.
+
+## Brainstorming Rules
+
+This is a **generative** session, not a review. The conversation should be:
+- **Expansive in round 1:** Each persona proposes ideas, directions, and connections
+- **Constructively critical in round 2:** Personas respond to each other — building on ideas, pointing out issues, suggesting refinements
+- **Convergent in round 3:** The panel narrows down to the 2-3 most promising directions
+
+The Competitor plays a special role: they should propose **competing approaches** and identify which existing work would need to be beaten.
+
+{{CONVERSATION_ENGINE}}
+
+## Synthesis Format
+
+```markdown
+# Brainstorm: [Topic]
+
+## Most Promising Directions
+1. **[Direction]** — [Why it's promising] — [Key challenge] — [First step]
+2. ...
+
+## Ideas Explored and Discarded
+1. [Idea] — [Why it was discarded]
+
+## Key Questions to Answer First
+1. [Question — why it matters — how to answer it]
+
+## Relevant Literature
+- [Paper] — [Why it's relevant]
+
+## Suggested Next Steps
+1. [Concrete action — estimated effort — who should do it]
+```

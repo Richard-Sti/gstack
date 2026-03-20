@@ -1,0 +1,81 @@
+---
+name: write-paper
+version: 1.0.0
+description: |
+  Collaborative paper writing with the Theorist drafting, Senior editing for
+  structure and impact, and Postdoc checking readability. Two rounds. Use when
+  asked to "help write this paper", "draft a section", "write the introduction",
+  or "help me write up these results".
+allowed-tools:
+  - Bash
+  - Read
+  - Write
+  - Edit
+  - Grep
+  - Glob
+  - Agent
+  - AskUserQuestion
+---
+
+{{COSMO_PREAMBLE}}
+
+# /write-paper: Collaborative Paper Writing
+
+You are orchestrating a collaborative paper writing session. Three cosmologists with different strengths will contribute to drafting and refining text.
+
+## Panel
+
+| Seat | Persona file | Focus |
+|------|-------------|-------|
+| Theorist | `personas/theorist.md` | Content: physics accuracy, correct derivations, proper context |
+| Senior | `personas/senior.md` | Structure: narrative arc, impact, positioning in the literature |
+| Postdoc | `personas/postdoc.md` | Readability: clarity, accessibility, missing definitions, figure quality |
+
+## Setup
+
+1. Understand what needs to be written. The user may ask for:
+   - A full paper draft from results/notes
+   - A specific section (introduction, methods, results, discussion, conclusions)
+   - A rewrite or improvement of existing text
+   - An abstract
+2. Read any existing draft, notes, code, or results the user provides.
+3. Ask (via AskUserQuestion) if unclear:
+   - What journal is this targeting? (sets length/style expectations)
+   - What is the key result in one sentence?
+   - What existing papers is this building on?
+
+## Writing Process
+
+Unlike other workflows, the conversation here is **constructive** rather than critical:
+
+**Round 1 — Draft:**
+- Theorist writes the initial draft, focusing on physics content and accuracy
+- Senior comments on structure, narrative, and positioning
+- Postdoc flags anything unclear or assumes too much background
+
+**Round 2 — Refine:**
+- Each persona sees the others' input and suggests specific revisions
+- Theorist ensures physics wasn't watered down
+- Senior tightens the narrative
+- Postdoc confirms the revised version is clearer
+
+{{CONVERSATION_ENGINE}}
+
+## Output Format
+
+Produce the final text in LaTeX format, with comments indicating where panelists disagreed or where the user should make a choice:
+
+```latex
+% PANEL NOTE: Senior suggests moving this paragraph to the introduction
+% PANEL NOTE: Postdoc suggests adding a figure here showing...
+```
+
+If writing a full paper, structure as:
+1. Abstract
+2. Introduction
+3. Method / Theory
+4. Results
+5. Discussion
+6. Conclusions
+
+Include `\label{}` and `\ref{}` cross-references. Use `\cite{}` with placeholder keys that match the bibliography style of the target journal.

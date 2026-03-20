@@ -1,0 +1,79 @@
+---
+name: compare-codes
+version: 1.0.0
+description: |
+  Panel code comparison against existing implementations. Assembles the Coder,
+  Referee, and Competitor to benchmark, validate, and stress-test against
+  established codes. Two rounds. Use when asked to "compare with CLASS",
+  "benchmark against", "validate against existing code", or "compare implementations".
+allowed-tools:
+  - Bash
+  - Read
+  - Write
+  - Edit
+  - Grep
+  - Glob
+  - Agent
+  - AskUserQuestion
+---
+
+{{COSMO_PREAMBLE}}
+
+# /compare-codes: Panel Code Comparison
+
+You are orchestrating a systematic comparison of the user's code against existing implementations. Three experts will evaluate correctness, performance, and methodology.
+
+## Panel
+
+| Seat | Persona file | Focus |
+|------|-------------|-------|
+| Coder | `personas/coder.md` | Implementation: algorithms, performance, numerical precision, API design |
+| Referee | `personas/referee.md` | Methodology: is the comparison fair? Same inputs? Same conventions? |
+| Competitor | `personas/competitor.md` | Adversarial: where does this code fail that the other doesn't? Hidden assumptions? |
+
+## Setup
+
+1. Identify what's being compared. The user may provide:
+   - Their code + a reference code name (e.g., CLASS, CAMB, emcee, Cobaya, CosmoSIS)
+   - Two code implementations to compare against each other
+   - Outputs from both codes to compare
+2. Read the user's code. If the reference code is well-known, use your knowledge of its approach.
+3. Identify the key computations being compared (e.g., power spectra, likelihoods, parameter posteriors).
+
+## Comparison Axes
+
+Each panelist should consider:
+- **Numerical agreement:** Do they give the same answers to the required precision?
+- **Performance:** Runtime, memory usage, scaling with problem size
+- **Approximations:** Do both codes make the same approximations? Different ones?
+- **Input conventions:** Same cosmological parameter definitions? Same units?
+- **Edge cases:** Where do they diverge? At high-ℓ? At low-z? For extreme parameters?
+- **Features:** What does the reference code support that this doesn't? Vice versa?
+
+{{CONVERSATION_ENGINE}}
+
+## Synthesis Format
+
+```markdown
+# Code Comparison: [User's Code] vs [Reference Code]
+
+## Summary
+[Agreement level] — one-line assessment
+
+## Agreement Tests
+| Quantity | Max difference | Acceptable? | Notes |
+|----------|---------------|-------------|-------|
+
+## Performance Comparison
+| Metric | This code | Reference | Factor |
+|--------|-----------|-----------|--------|
+
+## Key Differences
+1. [Difference — why it exists — whether it matters]
+
+## Advantages of This Code
+1. [What it does better]
+
+## Gaps to Address
+1. [What's missing or worse — priority — effort to fix]
+```

@@ -1,0 +1,76 @@
+---
+name: bias-test
+version: 1.0.0
+description: |
+  Panel bias testing of an inference pipeline. Assembles the Referee, Competitor,
+  and Coder to systematically hunt for biases in parameter estimation, model
+  selection, or data analysis. Three rounds. Use when asked to "check for biases",
+  "test my inference", "validate my pipeline", or "is my posterior trustworthy".
+allowed-tools:
+  - Bash
+  - Read
+  - Write
+  - Edit
+  - Grep
+  - Glob
+  - Agent
+  - AskUserQuestion
+---
+
+{{COSMO_PREAMBLE}}
+
+# /bias-test: Panel Bias Testing
+
+You are orchestrating a systematic bias hunt on an inference pipeline. Three adversarial experts will probe for biases from different angles, then debate their findings.
+
+## Panel
+
+| Seat | Persona file | Focus |
+|------|-------------|-------|
+| Referee | `personas/referee.md` | Statistical rigour: priors, likelihood assumptions, coverage, calibration |
+| Competitor | `personas/competitor.md` | Alternative explanations: would different model choices change the result? |
+| Coder | `personas/coder.md` | Implementation biases: numerical precision, sampler convergence, seed sensitivity |
+
+## Setup
+
+1. Identify the inference pipeline to test. The user may provide:
+   - Code files (likelihood, prior, sampler config)
+   - Results (chains, corner plots, summary statistics)
+   - A description of the analysis
+2. Read the pipeline code and any available results.
+3. Identify: what parameters are being inferred? What data is being used? What model is assumed?
+
+## Bias Checklist (seed the panel discussion with these)
+
+Each panelist should consider (from their perspective):
+- **Prior sensitivity:** Do the posteriors change significantly with different reasonable priors?
+- **Likelihood assumptions:** Is the likelihood model correct? Gaussian when it shouldn't be?
+- **Model misspecification:** What if the true model isn't in your model space?
+- **Data selection:** Are there cuts that could bias the result? Redshift ranges, sky masks?
+- **Sampler convergence:** Has the chain actually converged? Gelman-Rubin, effective sample size?
+- **Numerical precision:** Float32 vs float64 effects? Integration accuracy?
+- **Look-elsewhere effect:** How many parameters/models were tried before settling on this one?
+- **Blinding:** Was the analysis blinded? Could confirmation bias have influenced choices?
+
+{{CONVERSATION_ENGINE}}
+
+## Synthesis Format
+
+```markdown
+# Bias Test Report: [Analysis Name]
+
+## Risk Level
+[Low / Medium / High / Critical] — one-line justification
+
+## Biases Found
+1. [Bias — severity — how to test — how to fix]
+
+## Biases Tested and Cleared
+1. [What was checked and passed]
+
+## Recommended Validation Tests
+1. [Concrete test — expected outcome if unbiased — what a failure would mean]
+
+## Open Questions
+- [Things that couldn't be determined from code review alone]
+```

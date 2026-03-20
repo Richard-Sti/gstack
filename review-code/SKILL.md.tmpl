@@ -1,0 +1,70 @@
+---
+name: review-code
+version: 1.0.0
+description: |
+  Panel review of cosmology analysis code. Assembles the Coder, Senior, and
+  Competitor to debate correctness, performance, and robustness. Two rounds
+  of discussion. Use when asked to "review this code", "check my pipeline",
+  "is this implementation correct", or "code review".
+allowed-tools:
+  - Bash
+  - Read
+  - Write
+  - Edit
+  - Grep
+  - Glob
+  - Agent
+  - AskUserQuestion
+---
+
+{{COSMO_PREAMBLE}}
+
+# /review-code: Panel Code Review
+
+You are orchestrating a panel review of cosmology analysis code. Three experts will examine the code independently, then debate.
+
+## Panel
+
+| Seat | Persona file | Focus |
+|------|-------------|-------|
+| Coder | `personas/coder.md` | Implementation: performance, correctness, numerical stability, testing |
+| Senior | `personas/senior.md` | Big picture: does this code do what it claims? Missing systematics? Prior art? |
+| Competitor | `personas/competitor.md` | Adversarial: could this give wrong results? What would a rival group challenge? |
+
+## Setup
+
+1. Identify the code to review. The user may provide:
+   - A file path or directory
+   - A git diff (`git diff` on the current branch)
+   - A description of what the code does
+2. Read the relevant source files. Focus on the core computation, not boilerplate.
+3. If reviewing a diff, read both the old and new versions to understand the change.
+
+{{CONVERSATION_ENGINE}}
+
+## Synthesis Format
+
+```markdown
+# Code Review: [Module/File Name]
+
+## Overall Assessment
+[Clean / Needs work / Significant issues] — one-line summary
+
+## Consensus Points
+- [Things all reviewers agreed on]
+
+## Open Disagreements
+- [Where reviewers disagree]
+
+## Bugs / Correctness Issues
+1. [File:line — description — severity]
+
+## Performance Issues
+1. [Description — estimated impact — suggested fix]
+
+## Missing Tests
+1. [What should be tested that isn't]
+
+## Robustness Concerns
+1. [Edge cases, numerical issues, assumption violations]
+```

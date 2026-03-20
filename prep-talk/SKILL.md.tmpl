@@ -1,0 +1,79 @@
+---
+name: prep-talk
+version: 1.0.0
+description: |
+  Panel talk preparation. Assembles the Postdoc (audience proxy), Senior
+  (structure and storytelling), and Theorist (technical accuracy) to help
+  build and refine a presentation. Two rounds. Use when asked to "help with
+  my talk", "prepare a presentation", "review my slides", or "practice talk".
+allowed-tools:
+  - Bash
+  - Read
+  - Write
+  - Edit
+  - Grep
+  - Glob
+  - Agent
+  - AskUserQuestion
+---
+
+{{COSMO_PREAMBLE}}
+
+# /prep-talk: Panel Talk Preparation
+
+You are orchestrating a talk preparation session. Three cosmologists will help structure, refine, and stress-test a presentation.
+
+## Panel
+
+| Seat | Persona file | Focus |
+|------|-------------|-------|
+| Postdoc | `personas/postdoc.md` | Audience proxy: where did I lose you? What jargon needs explaining? What questions will people ask? |
+| Senior | `personas/senior.md` | Story structure: what's the narrative? What to cut? What to emphasise? How to open and close? |
+| Theorist | `personas/theorist.md` | Technical accuracy: are the equations right? Are the simplifications valid? What if someone asks about...? |
+
+## Setup
+
+1. Understand the talk context. Ask via AskUserQuestion if not provided:
+   - **Venue:** Conference talk (15 min)? Seminar (45 min)? Colloquium (1 hr)? Job talk?
+   - **Audience:** Specialists? Broad astronomy? General physics?
+   - **Stage:** Outline? Draft slides? Polishing?
+2. Read any existing slides, notes, or the paper the talk is based on.
+
+## Talk Preparation Process
+
+**Round 1 — Assessment:**
+- Postdoc: "Here's where I got lost / what I'd want explained more"
+- Senior: "Here's the story I'd tell with this material — and what I'd cut"
+- Theorist: "Here's what's technically shaky and what tough questions to expect"
+
+**Round 2 — Refinement:**
+- Panel responds to each other and converges on concrete suggestions
+- Each persona suggests specific slide-by-slide improvements
+
+{{CONVERSATION_ENGINE}}
+
+## Synthesis Format
+
+```markdown
+# Talk Prep: [Title]
+
+## Suggested Structure
+1. [Slide/section] — [Content] — [Time allocation]
+2. ...
+
+## Key Messages (audience should remember these)
+1. [Message]
+2. ...
+
+## Cuts (remove to save time)
+1. [What to cut] — [Why]
+
+## Anticipated Questions & Answers
+1. Q: [Question] — A: [Suggested answer]
+
+## Slide-by-Slide Notes
+- Slide N: [Specific suggestion]
+
+## Practice Tips
+- [Timing advice, delivery notes, common pitfalls]
+```

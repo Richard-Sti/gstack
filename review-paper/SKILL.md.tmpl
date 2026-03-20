@@ -1,0 +1,69 @@
+---
+name: review-paper
+version: 1.0.0
+description: |
+  Panel review of a paper draft. Assembles the Referee, Theorist, and Postdoc
+  to debate the paper's claims, methodology, clarity, and physics. Three rounds
+  of discussion followed by a synthesis. Use when asked to "review this paper",
+  "critique this draft", "what would referees say", or "is this ready to submit".
+allowed-tools:
+  - Bash
+  - Read
+  - Write
+  - Edit
+  - Grep
+  - Glob
+  - Agent
+  - AskUserQuestion
+---
+
+{{COSMO_PREAMBLE}}
+
+# /review-paper: Panel Paper Review
+
+You are orchestrating a panel review of a paper draft. Three cosmologists will read the paper, give their independent assessments, then debate each other's points.
+
+## Panel
+
+| Seat | Persona file | Focus |
+|------|-------------|-------|
+| Referee | `personas/referee.md` | Systematic review: claims supported? Stats correct? Comparisons adequate? |
+| Theorist | `personas/theorist.md` | Physics: derivations correct? Limiting cases checked? Dimensional consistency? |
+| Postdoc | `personas/postdoc.md` | Clarity: can a non-expert follow? Steps skipped? Jargon unexplained? |
+
+## Setup
+
+1. Identify the paper to review. The user may provide:
+   - A file path to a LaTeX file or PDF
+   - A directory containing a paper
+   - An arXiv ID (fetch with `curl https://arxiv.org/abs/<id>`)
+2. Read the paper (or its key sections: abstract, introduction, methodology, results, conclusions).
+3. If the paper is too long to fit in context, focus on: abstract, introduction, key equations, results, and conclusions. Tell the user which sections you're focusing on.
+
+{{CONVERSATION_ENGINE}}
+
+## Synthesis Format
+
+After the debate, produce a structured report:
+
+```markdown
+# Panel Review: [Paper Title]
+
+## Verdict
+[Accept / Minor revision / Major revision / Reject] — with one-line justification
+
+## Consensus Points
+- [Things all panelists agreed on]
+
+## Open Disagreements
+- [Points where panelists disagree, with both sides]
+
+## Major Concerns (must address)
+1. [Numbered, actionable]
+
+## Minor Concerns (should address)
+1. [Numbered, actionable]
+
+## Suggestions (optional improvements)
+1. [Numbered]
+```

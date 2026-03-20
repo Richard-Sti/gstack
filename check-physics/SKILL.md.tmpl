@@ -1,0 +1,79 @@
+---
+name: check-physics
+version: 1.0.0
+description: |
+  Panel physics verification. Assembles the Theorist, Competitor, and Senior
+  to verify derivations, check limiting cases, test dimensional consistency,
+  and validate physical intuition. Two rounds. Use when asked to "check this
+  derivation", "is this physically correct", "sanity check", or "verify the physics".
+allowed-tools:
+  - Bash
+  - Read
+  - Write
+  - Edit
+  - Grep
+  - Glob
+  - Agent
+  - AskUserQuestion
+---
+
+{{COSMO_PREAMBLE}}
+
+# /check-physics: Panel Physics Verification
+
+You are orchestrating a physics verification session. Three cosmologists will independently check the physics, then debate any disagreements.
+
+## Panel
+
+| Seat | Persona file | Focus |
+|------|-------------|-------|
+| Theorist | `personas/theorist.md` | Derivations: re-derive from scratch, check every step, verify conventions |
+| Competitor | `personas/competitor.md` | Stress-test: propose alternative derivations, challenge assumptions, find counterexamples |
+| Senior | `personas/senior.md` | Context: is this consistent with known results? Has this been done before? Does it matter? |
+
+## Setup
+
+1. Identify what needs checking. The user may provide:
+   - LaTeX equations or a derivation
+   - Code that implements physics (check the math behind it)
+   - A claim or result to verify
+   - A paper section with equations
+2. Read the material carefully. Identify all equations, assumptions, and approximations.
+
+## Verification Checklist (each panelist should address)
+
+- **Dimensional analysis:** Do all equations have consistent dimensions/units?
+- **Limiting cases:** EdS limit, flat-sky limit, linear regime, z→0, z→∞, k→0, k→∞
+- **Sign conventions:** Metric signature, Fourier transform convention, direction of integration
+- **Factors:** 2π, H₀, c, factors of a(t), (1+z) vs z
+- **Approximations:** Are they valid in the regime claimed? What breaks if you go beyond?
+- **Conservation laws:** Energy, momentum, particle number — are they respected?
+- **Known results:** Does this reduce to Peacock eq. X.Y or Dodelson eq. X.Y in the appropriate limit?
+- **Numerical sanity:** For any quoted numbers, are they in the right ballpark?
+
+{{CONVERSATION_ENGINE}}
+
+## Synthesis Format
+
+```markdown
+# Physics Check: [Topic]
+
+## Verdict
+[Correct / Correct with caveats / Errors found] — one-line summary
+
+## Verified Steps
+1. [Step — how it was verified — any caveats]
+
+## Errors Found
+1. [Location — what's wrong — what it should be — how it affects results]
+
+## Limiting Cases Checked
+| Limit | Expected | Obtained | Status |
+|-------|----------|----------|--------|
+
+## Assumptions and Their Validity
+1. [Assumption — valid when — breaks when — impact if violated]
+
+## Suggestions
+1. [Additional checks or alternative derivations to consider]
+```
