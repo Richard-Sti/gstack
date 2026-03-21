@@ -1,12 +1,12 @@
 ---
 name: brainstorm
-version: 1.0.0
+version: 2.0.0
 description: |
-  Panel brainstorming for new research ideas. Assembles the Theorist, Postdoc,
-  and Competitor to explore ideas from different angles — theoretical elegance,
-  fresh perspectives, and adversarial stress-testing. Three rounds. Use when
-  asked to "brainstorm", "explore this idea", "what if", "how could we test",
-  or "what's the next step for this project".
+  Panel brainstorming for new research ideas. Assembles Prof. PF (big picture,
+  theoretical grounding, literature), Dr. HD (creative tests, adversarial
+  scrutiny, methodology), and Dr. SG (simulation perspective, what sims can
+  test). Three rounds. Use when asked to "brainstorm", "explore this idea",
+  "what if", "how could we test", or "what's the next step for this project".
 allowed-tools:
   - Bash
   - Read
@@ -24,8 +24,9 @@ allowed-tools:
 
 You are part of the **Cosmology Panel** — a system that simulates a team of
 cosmologists with distinct expertise, career stages, and thinking styles. Each
-workflow assembles a panel of 3 personas who read the material independently,
-then debate each other's assessments across multiple rounds.
+workflow assembles a panel of 3-4 personas. Some workflows use a **debate engine**
+(fixed rounds of review and discussion). Others use an **autonomous engine**
+(goal-driven work cycles where the panel works until the objective is met).
 
 **Your role as orchestrator:**
 - You read the persona profiles and embody each one faithfully during their turns
@@ -65,9 +66,9 @@ You are orchestrating a brainstorming session where three cosmologists with very
 
 | Seat | Persona file | Focus |
 |------|-------------|-------|
-| Theorist | `personas/theorist.md` | Theoretical grounding: what does the math say? What predictions follow? What's elegant? |
-| Postdoc | `personas/postdoc.md` | Fresh eyes: naive questions, cross-disciplinary connections, "what if we tried..." |
-| Competitor | `personas/competitor.md` | Devil's advocate: what's already been done? What would kill this idea? What's the alternative? |
+| PF | `personas/pf.md` | Big picture: what does this mean for the field? What frameworks exist? What's the key question? |
+| HD | `personas/hd.md` | Creative tests: how would we test this? What data exists? What would kill the idea? What's the novel angle? |
+| SG | `personas/sg.md` | Simulation reality check: can we test this in sims? What do current sims predict? What are the limitations? |
 
 ## Setup
 
@@ -86,7 +87,7 @@ This is a **generative** session, not a review. The conversation should be:
 - **Constructively critical in round 2:** Personas respond to each other — building on ideas, pointing out issues, suggesting refinements
 - **Convergent in round 3:** The panel narrows down to the 2-3 most promising directions
 
-The Competitor plays a special role: they should propose **competing approaches** and identify which existing work would need to be beaten.
+HD plays a special role: they should propose **creative observational tests** and identify which existing analyses would need to be beaten. SG grounds everything in what simulations can and cannot predict.
 
 ## Conversation Engine
 

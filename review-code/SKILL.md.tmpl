@@ -1,11 +1,12 @@
 ---
 name: review-code
-version: 1.0.0
+version: 2.0.0
 description: |
-  Panel review of cosmology analysis code. Assembles the Coder, Senior, and
-  Competitor to debate correctness, performance, and robustness. Two rounds
-  of discussion. Use when asked to "review this code", "check my pipeline",
-  "is this implementation correct", or "code review".
+  Panel review of cosmology analysis code. Assembles the Coder (implementation
+  quality, differentiability, testing), Prof. GL (forward model correctness,
+  field-level methods), and Prof. JV (likelihood construction, sampler config,
+  convergence). Two rounds of discussion. Use when asked to "review this code",
+  "check my pipeline", "is this implementation correct", or "code review".
 allowed-tools:
   - Bash
   - Read
@@ -27,9 +28,9 @@ You are orchestrating a panel review of cosmology analysis code. Three experts w
 
 | Seat | Persona file | Focus |
 |------|-------------|-------|
-| Coder | `personas/coder.md` | Implementation: performance, correctness, numerical stability, testing |
-| Senior | `personas/senior.md` | Big picture: does this code do what it claims? Missing systematics? Prior art? |
-| Competitor | `personas/competitor.md` | Adversarial: could this give wrong results? What would a rival group challenge? |
+| Coder | `personas/coder.md` | Implementation: differentiability, performance, correctness, numerical stability, testing |
+| GL | `personas/gl.md` | Forward model: does this implement a proper generative model? Survey systematics handled? Field-level correctness? |
+| JV | `personas/jv.md` | Inference: likelihood correct? Sampler configured properly? Convergence diagnostics? Prior choices? |
 
 ## Setup
 

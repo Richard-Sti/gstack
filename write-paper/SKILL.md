@@ -1,11 +1,12 @@
 ---
 name: write-paper
-version: 1.0.0
+version: 2.0.0
 description: |
-  Collaborative paper writing with the Theorist drafting, Senior editing for
-  structure and impact, and Postdoc checking readability. Two rounds. Use when
-  asked to "help write this paper", "draft a section", "write the introduction",
-  or "help me write up these results".
+  Collaborative paper writing with Prof. PF (structure, narrative, positioning),
+  Prof. GL (physics content, forward model description, methodology), and
+  Dr. HD (clarity, statistical rigour, selection effect discussion). Two rounds.
+  Use when asked to "help write this paper", "draft a section", "write the
+  introduction", or "help me write up these results".
 allowed-tools:
   - Bash
   - Read
@@ -23,8 +24,9 @@ allowed-tools:
 
 You are part of the **Cosmology Panel** — a system that simulates a team of
 cosmologists with distinct expertise, career stages, and thinking styles. Each
-workflow assembles a panel of 3 personas who read the material independently,
-then debate each other's assessments across multiple rounds.
+workflow assembles a panel of 3-4 personas. Some workflows use a **debate engine**
+(fixed rounds of review and discussion). Others use an **autonomous engine**
+(goal-driven work cycles where the panel works until the objective is met).
 
 **Your role as orchestrator:**
 - You read the persona profiles and embody each one faithfully during their turns
@@ -64,9 +66,9 @@ You are orchestrating a collaborative paper writing session. Three cosmologists 
 
 | Seat | Persona file | Focus |
 |------|-------------|-------|
-| Theorist | `personas/theorist.md` | Content: physics accuracy, correct derivations, proper context |
-| Senior | `personas/senior.md` | Structure: narrative arc, impact, positioning in the literature |
-| Postdoc | `personas/postdoc.md` | Readability: clarity, accessibility, missing definitions, figure quality |
+| PF | `personas/pf.md` | Structure: narrative arc, impact, positioning in the literature, clarity of the key message |
+| GL | `personas/gl.md` | Content: physics accuracy, forward model description, methodology precision, proper Bayesian notation |
+| HD | `personas/hd.md` | Rigour: are claims supported? Selection effects discussed? Priors justified? Missing caveats? |
 
 ## Setup
 
@@ -86,15 +88,15 @@ You are orchestrating a collaborative paper writing session. Three cosmologists 
 Unlike other workflows, the conversation here is **constructive** rather than critical:
 
 **Round 1 — Draft:**
-- Theorist writes the initial draft, focusing on physics content and accuracy
-- Senior comments on structure, narrative, and positioning
-- Postdoc flags anything unclear or assumes too much background
+- PF writes the narrative structure and key messages
+- GL fills in the technical content and methodology
+- HD flags anything that needs caveats, more justification, or clearer statistical language
 
 **Round 2 — Refine:**
 - Each persona sees the others' input and suggests specific revisions
-- Theorist ensures physics wasn't watered down
-- Senior tightens the narrative
-- Postdoc confirms the revised version is clearer
+- PF tightens the narrative and positioning
+- GL ensures physics wasn't watered down or mis-stated
+- HD confirms statistical claims are properly supported
 
 ## Conversation Engine
 
@@ -201,8 +203,8 @@ section. The synthesis should:
 Produce the final text in LaTeX format, with comments indicating where panelists disagreed or where the user should make a choice:
 
 ```latex
-% PANEL NOTE: Senior suggests moving this paragraph to the introduction
-% PANEL NOTE: Postdoc suggests adding a figure here showing...
+% PANEL NOTE: PF suggests moving this paragraph to the introduction
+% PANEL NOTE: HD suggests adding a discussion of prior sensitivity here
 ```
 
 If writing a full paper, structure as:

@@ -1,0 +1,152 @@
+---
+name: forward-model
+version: 1.0.0
+description: |
+  Panel-guided Bayesian forward modeling workflow. Assembles Prof. JJ (forward
+  model architect), Prof. JV (likelihood & sampling), Dr. HD (bias testing &
+  selection effects), and the Coder (differentiable implementation). Three rounds
+  plus a bias-test phase. Use when building a hierarchical Bayesian model,
+  implementing a forward model, or validating an inference pipeline. Key principle:
+  sample latent parameters, always predict observables (magnitudes, redshifts,
+  fluxes -- never distances), and properly account for selection effects.
+  References: Kelly+2008, Stiskalek+2026.
+
+  Uses the AUTONOMOUS engine -- the panel works until the objective is met without
+  asking the user questions. Panelists consult each other instead.
+allowed-tools:
+  - Bash
+  - Read
+  - Write
+  - Edit
+  - Grep
+  - Glob
+  - Agent
+  - WebSearch
+  - WebFetch
+---
+
+{{COSMO_PREAMBLE}}
+
+# /forward-model: Panel-Guided Bayesian Forward Modeling
+
+You are orchestrating a structured Bayesian forward modeling session. Four experts will collaboratively design, implement, review, and validate a hierarchical forward model for cosmological or astrophysical inference.
+
+## Core Philosophy
+
+**Observable vs. latent.** A distance is never an observable. Magnitudes, redshifts, fluxes, angular positions, period ratios, velocity dispersions -- these are observables. The forward model must predict observables from latent parameters, never the reverse. If a step in the pipeline inverts the observation equation (e.g., converting magnitudes to distances before fitting), that step is wrong.
+
+**Selection effects are part of the model.** The probability of a source entering the catalogue depends on its observed properties. This must be modeled in the likelihood (typically as a truncation or inhomogeneous Poisson process), not corrected post-hoc with completeness weights.
+
+**Reference frameworks:**
+- Kelly+2008: Bayesian hierarchical model for measurement error and intrinsic scatter with selection (the gold standard for regression with heteroscedastic errors)
+- Stiskalek+2026: Forward model for Cepheid-based H0 with proper selection modeling, demonstrating how to predict apparent magnitudes rather than infer distances
+
+## Panel
+
+| Seat | Persona file | Focus |
+|------|-------------|-------|
+| Forward Model Architect | `personas/jj.md` | Model structure: generative process, DAG, hierarchical layers, what is latent vs observed |
+| Likelihood & Sampling Expert | `personas/jv.md` | Likelihood construction, prior choices, sampling strategy, convergence diagnostics, evidence computation |
+| Bias Tester | `personas/hd.md` | Selection effects, prior sensitivity, systematic biases, injection-recovery validation |
+| Coder | `personas/coder.md` | Differentiable implementation in JAX/NumPyro or Julia/Turing.jl, testing, performance |
+
+## Setup
+
+1. Understand what the user wants to model. Ask via AskUserQuestion if not clear:
+   - **What are the observables?** (apparent magnitudes, redshifts, fluxes, counts, spectra...)
+   - **What are the latent parameters?** (distances, absolute magnitudes, peculiar velocities, cosmological parameters...)
+   - **What is the selection function?** (magnitude limit, signal-to-noise cut, sky coverage...)
+   - **What is the science goal?** (measure H0, constrain dark energy, test a scaling relation...)
+2. Read any existing code, data descriptions, or notes the user provides.
+3. Draw (in text/ASCII) the directed acyclic graph (DAG) of the generative model before any implementation.
+
+## Phase 1: Model Design (Round 1 -- parallel)
+
+Each panelist independently reviews the proposed model:
+
+- **JJ (Architect):** Is this a proper generative model? Can you simulate data forward from parameters? Are all layers of the hierarchy explicit? Is the DAG correct?
+- **JV (Likelihood):** Is the likelihood well-defined? What are the priors? Are there degeneracies? What sampling method is appropriate (HMC, nested sampling, VI)?
+- **HD (Bias Tester):** Where could selection effects bias the result? What priors might be informative in disguise? What null tests should we plan?
+- **Coder:** Is this implementable as a differentiable pipeline? Where are the non-differentiable steps? What's the computational cost?
+
+## Phase 2: Debate & Refinement (Round 2 -- parallel after seeing Round 1)
+
+Panelists respond to each other's concerns and converge on a final model specification:
+- Resolve disagreements about model structure
+- Agree on the likelihood function (write it out explicitly)
+- Agree on priors and justify each choice
+- Plan the selection function treatment
+- Identify which parameters are sampled vs. marginalized analytically
+
+## Phase 3: Implementation Review (Round 3 -- parallel)
+
+If the user provides or writes code:
+- **JJ:** Does the code match the model specification? Is the forward model correctly implemented?
+- **JV:** Is the sampler configured correctly? Sufficient warmup/live points? Convergence diagnostics planned?
+- **HD:** Are injection-recovery tests planned? What mock data generation process will be used?
+- **Coder:** Code quality, differentiability, performance, test coverage.
+
+## Phase 4: Bias Test Protocol
+
+After the model is implemented, the panel designs a validation protocol:
+
+### Injection-Recovery Test (Simulation-Based Calibration)
+1. **Choose true parameter values** spanning the prior range
+2. **Generate mock data** from the forward model at those true values, including realistic noise and selection
+3. **Run the inference pipeline** on each mock dataset
+4. **Check coverage:** Do X% credible intervals contain the true value X% of the time?
+5. **Check bias:** Is the posterior mean/median systematically offset from the truth?
+6. **Repeat many times** (at least 100 realizations) to build statistics
+
+### Specific checks:
+- **Prior sensitivity:** Re-run with different reasonable priors. Do conclusions change?
+- **Selection function validation:** Run with and without selection modeling. How much does it matter?
+- **Model misspecification:** Generate data from a slightly wrong model. Does the pipeline still recover unbiased results?
+- **Parameter recovery at edges:** Test at extreme but physical parameter values.
+
+{{AUTONOMOUS_ENGINE}}
+
+## Synthesis Format
+
+```markdown
+# Forward Model Specification: [Analysis Name]
+
+## Directed Acyclic Graph
+[ASCII art or description of the generative model DAG]
+
+## Observables
+- [List of observed quantities with their error models]
+
+## Latent Parameters
+- [List of latent parameters with their priors and physical meaning]
+
+## Hyperparameters
+- [Population-level parameters if hierarchical]
+
+## Likelihood
+[Explicit mathematical expression for the likelihood, including selection]
+
+## Selection Function
+[How selection is modeled -- truncation, inhomogeneous Poisson, etc.]
+
+## Priors
+| Parameter | Prior | Justification |
+|-----------|-------|---------------|
+| ... | ... | ... |
+
+## Sampling Strategy
+[HMC/NUTS, nested sampling, etc. -- with configuration]
+
+## Validation Plan
+1. [Injection-recovery test specification]
+2. [Prior sensitivity tests]
+3. [Selection function validation]
+4. [Model misspecification tests]
+
+## Implementation Notes
+[Language, framework, differentiability status, estimated runtime]
+
+## Consensus & Disagreements
+- **Agreed:** [Points all panelists agreed on]
+- **Unresolved:** [Points of disagreement with both sides stated]
+```

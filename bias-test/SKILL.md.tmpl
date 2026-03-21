@@ -1,11 +1,13 @@
 ---
 name: bias-test
-version: 1.0.0
+version: 2.0.0
 description: |
-  Panel bias testing of an inference pipeline. Assembles the Referee, Competitor,
-  and Coder to systematically hunt for biases in parameter estimation, model
-  selection, or data analysis. Three rounds. Use when asked to "check for biases",
-  "test my inference", "validate my pipeline", or "is my posterior trustworthy".
+  Panel bias testing of an inference pipeline. Assembles Prof. JV (sampler
+  convergence, likelihood validation, injection-recovery), Dr. HD (selection
+  effects, prior sensitivity, systematic biases), and the Coder (numerical
+  precision, implementation correctness, test automation). Three rounds.
+  Use when asked to "check for biases", "test my inference", "validate my
+  pipeline", or "is my posterior trustworthy".
 allowed-tools:
   - Bash
   - Read
@@ -27,9 +29,9 @@ You are orchestrating a systematic bias hunt on an inference pipeline. Three adv
 
 | Seat | Persona file | Focus |
 |------|-------------|-------|
-| Referee | `personas/referee.md` | Statistical rigour: priors, likelihood assumptions, coverage, calibration |
-| Competitor | `personas/competitor.md` | Alternative explanations: would different model choices change the result? |
-| Coder | `personas/coder.md` | Implementation biases: numerical precision, sampler convergence, seed sensitivity |
+| JV | `personas/jv.md` | Statistical rigour: sampler convergence, likelihood assumptions, coverage, calibration, P-P plots |
+| HD | `personas/hd.md` | Selection effects, prior sensitivity, model misspecification, hidden assumptions, alternative explanations |
+| Coder | `personas/coder.md` | Implementation biases: numerical precision, autodiff correctness, seed sensitivity, float32 vs float64 |
 
 ## Setup
 
@@ -46,11 +48,12 @@ Each panelist should consider (from their perspective):
 - **Prior sensitivity:** Do the posteriors change significantly with different reasonable priors?
 - **Likelihood assumptions:** Is the likelihood model correct? Gaussian when it shouldn't be?
 - **Model misspecification:** What if the true model isn't in your model space?
-- **Data selection:** Are there cuts that could bias the result? Redshift ranges, sky masks?
-- **Sampler convergence:** Has the chain actually converged? Gelman-Rubin, effective sample size?
-- **Numerical precision:** Float32 vs float64 effects? Integration accuracy?
+- **Selection effects:** Are there cuts that could bias the result? Magnitude limits, S/N thresholds?
+- **Sampler convergence:** Has the chain converged? R-hat, effective sample size, trace plots?
+- **Numerical precision:** Float32 vs float64 effects? Integration accuracy? Autodiff correctness?
 - **Look-elsewhere effect:** How many parameters/models were tried before settling on this one?
-- **Blinding:** Was the analysis blinded? Could confirmation bias have influenced choices?
+- **Injection-recovery:** Generate mock data from the model, re-infer. Are true values recovered?
+- **Simulation-based calibration:** Do X% credible intervals contain the truth X% of the time?
 
 {{CONVERSATION_ENGINE}}
 

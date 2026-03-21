@@ -1,9 +1,10 @@
 ---
 name: review-paper
-version: 1.0.0
+version: 2.0.0
 description: |
-  Panel review of a paper draft. Assembles the Referee, Theorist, and Postdoc
-  to debate the paper's claims, methodology, clarity, and physics. Three rounds
+  Panel review of a paper draft. Assembles Prof. JV (inference methodology,
+  statistical rigour), Prof. PF (big picture, clarity, literature context), and
+  Dr. HD (selection effects, bias testing, prior sensitivity). Three rounds
   of discussion followed by a synthesis. Use when asked to "review this paper",
   "critique this draft", "what would referees say", or "is this ready to submit".
 allowed-tools:
@@ -27,9 +28,9 @@ You are orchestrating a panel review of a paper draft. Three cosmologists will r
 
 | Seat | Persona file | Focus |
 |------|-------------|-------|
-| Referee | `personas/referee.md` | Systematic review: claims supported? Stats correct? Comparisons adequate? |
-| Theorist | `personas/theorist.md` | Physics: derivations correct? Limiting cases checked? Dimensional consistency? |
-| Postdoc | `personas/postdoc.md` | Clarity: can a non-expert follow? Steps skipped? Jargon unexplained? |
+| JV | `personas/jv.md` | Statistical rigour: likelihoods correct? Priors justified? Evidence properly computed? Injection-recovery done? |
+| PF | `personas/pf.md` | Big picture: does this matter? Is it positioned correctly in the literature? Is the communication clear? |
+| HD | `personas/hd.md` | Methodology: selection effects accounted for? Prior sensitivity tested? Hidden assumptions? Overclaiming? |
 
 ## Setup
 

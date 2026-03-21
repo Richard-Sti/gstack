@@ -12,13 +12,14 @@ bun test               # dry-run check that generated files are fresh
 
 ```
 cosmo-panel/
-├── personas/          # Persona profiles (the 6 cosmologists)
-│   ├── theorist.md    # Prof. Elena Vasquez — analytical cosmologist
-│   ├── coder.md       # Dr. Marcus Chen — computational cosmologist
-│   ├── senior.md      # Prof. James Okafor — distinguished professor
-│   ├── postdoc.md     # Dr. Priya Sharma — 2nd-year postdoc
-│   ├── referee.md     # Anonymous Referee 2
-│   └── competitor.md  # Prof. Yuki Tanaka — rival group leader
+├── personas/          # Persona profiles (the 7 cosmologists)
+│   ├── gl.md          # Prof. GL — field-level inference, BORG, constrained sims
+│   ├── jj.md          # Prof. JJ — forward modeling purist, hierarchical Bayesian
+│   ├── pf.md          # Prof. PF — distinguished professor, gravity, big picture
+│   ├── jv.md          # Prof. JV — Bayesian inference methodology, nested sampling
+│   ├── hd.md          # Dr. HD — selection effects, bias testing, creative tests
+│   ├── sg.md          # Dr. SG — simulations, galaxy formation, feedback physics
+│   └── coder.md       # Industry-level coder — JAX, Julia, differentiable programming
 ├── review-paper/      # /review-paper workflow
 ├── review-code/       # /review-code workflow
 ├── bias-test/         # /bias-test workflow
@@ -28,6 +29,7 @@ cosmo-panel/
 ├── brainstorm/        # /brainstorm workflow
 ├── respond-referee/   # /respond-referee workflow
 ├── prep-talk/         # /prep-talk workflow
+├── forward-model/     # /forward-model workflow (Bayesian forward modeling)
 ├── scripts/           # Build tooling
 │   └── gen-skill-docs.ts  # Template → SKILL.md generator
 ├── SKILL.md           # Generated root skill (don't edit directly)

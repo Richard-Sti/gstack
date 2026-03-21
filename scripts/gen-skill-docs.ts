@@ -28,8 +28,9 @@ function generateCosmoPreamble(_ctx: TemplateContext): string {
 
 You are part of the **Cosmology Panel** — a system that simulates a team of
 cosmologists with distinct expertise, career stages, and thinking styles. Each
-workflow assembles a panel of 3 personas who read the material independently,
-then debate each other's assessments across multiple rounds.
+workflow assembles a panel of 3-4 personas. Some workflows use a **debate engine**
+(fixed rounds of review and discussion). Others use an **autonomous engine**
+(goal-driven work cycles where the panel works until the objective is met).
 
 **Your role as orchestrator:**
 - You read the persona profiles and embody each one faithfully during their turns
@@ -164,11 +165,159 @@ section. The synthesis should:
 4. Be honest about uncertainty — if the panel couldn't resolve something, say so`;
 }
 
+function generateAutonomousEngine(_ctx: TemplateContext): string {
+  return `## Autonomous Work Engine
+
+This workflow uses the **autonomous engine** — the panel works independently until
+the objective is achieved. They do NOT ask the user questions. If a panelist needs
+information or has a question, they raise it with the panel and the orchestrator
+routes it to the most appropriate panelist.
+
+### Operating Principles
+
+1. **No user questions.** Do NOT use AskUserQuestion during the work loop. The panel
+   is self-sufficient. If a panelist is uncertain about something, the orchestrator
+   routes the question to whichever panelist has the relevant expertise.
+2. **Goal-driven iteration.** The panel works in cycles until the objective is met,
+   not for a fixed number of rounds. Each cycle produces concrete output (code, text,
+   equations) that the next cycle improves.
+3. **Long-running.** This engine is designed for tasks that take many iterations.
+   Do not rush to synthesis. Quality over speed.
+4. **Convergence check.** After each cycle, the orchestrator assesses whether the
+   output meets the acceptance criteria. If not, another cycle begins.
+5. **Research from the literature.** Panelists should actively search the internet
+   for relevant research papers, methods, and implementations using WebSearch and
+   WebFetch. Fetch papers from arXiv, read methodology sections, check what
+   approaches exist in the literature. However, panelists must be **critical** of
+   what they find — not every published paper is correct or applicable. Evaluate
+   the quality of the source: Is the journal reputable? Has the result been
+   reproduced? Are the methods sound? Does the paper's context match our problem?
+   Cite papers when they inform decisions, but never follow a paper blindly.
+
+### Cycle Structure
+
+Each cycle consists of three phases:
+
+#### Phase A: Work (parallel)
+
+Launch one subagent per panelist. Each receives:
+1. Their full persona profile
+2. The current state of the work product (code, text, model spec, etc.)
+3. Their assigned task for this cycle (from the Panel table's Focus column)
+4. The full transcript of all previous cycles
+5. The instruction: "Produce your contribution. Write actual output (code, text,
+   equations), not just commentary. If you need information from another panelist,
+   state your question clearly prefixed with QUESTION FOR [NAME]:. Be true to your
+   persona. No word limit — write as much as needed."
+
+**Subagent prompt template for Phase A:**
+\`\`\`
+You are [PERSONA NAME]. Here is your full profile:
+
+[PASTE FULL PERSONA .md CONTENT]
+
+## Current work product
+[PASTE CURRENT STATE OF CODE/TEXT/MODEL]
+
+## Your task this cycle
+[SPECIFIC TASK FROM WORKFLOW]
+
+## Previous cycles
+[FULL TRANSCRIPT OF PRIOR CYCLES, if any]
+
+## Questions from other panelists directed to you
+[ANY QUESTIONS TAGGED "QUESTION FOR [YOUR NAME]" FROM PRIOR PHASES]
+
+Produce your contribution. Write actual output — code, text, equations, derivations
+— not just commentary or suggestions. If you have a question for another panelist,
+prefix it with "QUESTION FOR [NAME]: ...". Be true to your persona's thinking style,
+communication style, and expertise. No word limit.
+
+If you need to look up methods, check existing implementations, or find relevant
+papers, use WebSearch and WebFetch to search arXiv and the literature. Be critical
+of what you find — evaluate whether the source is reliable and applicable before
+adopting its approach. Cite papers that inform your decisions.
+\`\`\`
+
+#### Phase B: Cross-Review (parallel)
+
+After collecting Phase A outputs, launch a new subagent for each panelist. Each receives:
+1. Their persona profile
+2. The combined Phase A output from ALL panelists
+3. Any questions directed to them (tagged QUESTION FOR [NAME])
+4. The instruction: "Review the other panelists' work. Answer any questions directed
+   to you. Flag errors, suggest improvements, and propose specific changes. Write
+   concrete fixes, not vague suggestions. If you approve of something, say so briefly
+   and move on — spend your words on what needs changing."
+
+**Subagent prompt template for Phase B:**
+\`\`\`
+You are [PERSONA NAME]. Here is your profile:
+
+[PASTE FULL PERSONA .md CONTENT]
+
+Here is what each panelist produced in Phase A of this cycle:
+
+[PERSONA A — WORK]: [Their Phase A output]
+[PERSONA B — WORK]: [Their Phase B output]
+[PERSONA C — WORK]: [Their Phase C output]
+
+Questions directed to you:
+[ANY "QUESTION FOR [YOUR NAME]" FROM PHASE A]
+
+Review the work. Answer questions directed to you. Flag errors and propose
+SPECIFIC fixes (show the corrected code/text/equation, don't just describe it).
+Approve what's good briefly. Spend your words on what needs changing.
+Stay in character. No word limit.
+\`\`\`
+
+#### Phase C: Integration
+
+The orchestrator (you) integrates the Phase A work and Phase B reviews into
+an updated work product. This is NOT a persona — this is you as the neutral
+integrator. Apply all agreed-upon fixes. For disputed points, note the
+disagreement and make a judgment call, flagging it for the next cycle.
+
+### Convergence Check
+
+After each cycle's integration, evaluate:
+1. **Completeness:** Does the work product address the full objective?
+2. **Consensus:** Are there unresolved disputes that require another cycle?
+3. **Quality:** Would each panelist sign off on this?
+4. **Unanswered questions:** Are there QUESTION FOR tags that weren't addressed?
+
+If ANY of these fail, start another cycle with the updated work product.
+
+**Maximum cycles:** 5 (to prevent infinite loops). If not converged after 5
+cycles, produce the best available output with a clear list of unresolved issues.
+
+### Displaying Progress
+
+After each cycle, display a brief status update:
+
+\`\`\`
+━━━ Cycle N / max 5 ━━━━━━━━━━━━━━━━━━━━━━━━━
+Status: [Working / Reviewing / Converged]
+Key changes this cycle: [1-3 bullet points]
+Open issues: [remaining disagreements or questions]
+\`\`\`
+
+Only display the full work product at the end, not after every cycle.
+
+### Final Output
+
+When converged (or after max cycles), produce:
+1. The final work product (code, paper text, model specification, etc.)
+2. A brief panel agreement summary (what was unanimous, what was majority, what was disputed)
+3. Any caveats or known limitations the panel identified`;
+}
+
 // ─── Resolver Registry ──────────────────────────────────────
 
 const RESOLVERS: Record<string, (ctx: TemplateContext) => string> = {
   COSMO_PREAMBLE: generateCosmoPreamble,
   CONVERSATION_ENGINE: generateConversationEngine,
+  AUTONOMOUS_ENGINE: generateAutonomousEngine,
 };
 
 // ─── Template Processing ────────────────────────────────────
@@ -227,6 +376,7 @@ function findTemplates(): string[] {
     'brainstorm',
     'respond-referee',
     'prep-talk',
+    'forward-model',
   ];
 
   for (const w of workflows) {
