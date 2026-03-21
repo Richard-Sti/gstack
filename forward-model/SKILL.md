@@ -90,11 +90,12 @@ You are orchestrating a structured Bayesian forward modeling session. Four exper
 
 ## Setup
 
-1. Understand what the user wants to model. Ask via AskUserQuestion if not clear:
+1. Understand what the user wants to model. The user should provide (or the panel infers from context):
    - **What are the observables?** (apparent magnitudes, redshifts, fluxes, counts, spectra...)
    - **What are the latent parameters?** (distances, absolute magnitudes, peculiar velocities, cosmological parameters...)
    - **What is the selection function?** (magnitude limit, signal-to-noise cut, sky coverage...)
    - **What is the science goal?** (measure H0, constrain dark energy, test a scaling relation...)
+   If any of these are unclear, the panel discusses and makes reasonable assumptions based on the material provided. Do NOT ask the user — resolve ambiguity through panel debate.
 2. Read any existing code, data descriptions, or notes the user provides.
 3. Draw (in text/ASCII) the directed acyclic graph (DAG) of the generative model before any implementation.
 
