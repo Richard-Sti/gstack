@@ -175,9 +175,12 @@ routes it to the most appropriate panelist.
 
 ### Operating Principles
 
-1. **No user questions.** Do NOT use AskUserQuestion during the work loop. The panel
-   is self-sufficient. If a panelist is uncertain about something, the orchestrator
-   routes the question to whichever panelist has the relevant expertise.
+1. **No user interaction.** Do NOT use AskUserQuestion at any point. Do NOT pause
+   to ask the user for confirmation, permission, or input. Do NOT ask "shall I
+   proceed?" or "ready for the next step?" The panel is fully self-sufficient.
+   If a panelist is uncertain, the orchestrator routes the question to whichever
+   panelist has the relevant expertise. If a decision must be made, the panel
+   debates and the orchestrator makes the call. Run to completion autonomously.
 2. **Goal-driven iteration.** The panel works in cycles until the objective is met,
    not for a fixed number of rounds. Each cycle produces concrete output (code, text,
    equations) that the next cycle improves.

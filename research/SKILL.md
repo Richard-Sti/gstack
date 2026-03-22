@@ -100,11 +100,22 @@ Every persona participates, but their involvement peaks at different phases.
 4. If the problem is underspecified, the panel sharpens it through debate in Phase 1
    — do NOT ask the user. Make reasonable assumptions and state them explicitly.
 
+## CRITICAL: Fully Autonomous Operation
+
+**DO NOT pause between phases to ask the user for confirmation, input, or permission
+to proceed.** Run all 6 phases back-to-back without stopping. The user expects to
+invoke `/research` and get the final output — not to be asked "shall I proceed to
+Phase 3?" or "ready to launch implementation?" Make all decisions autonomously. If
+phases can run in parallel (e.g., Physics + Implementation), launch them in parallel
+without asking. The only output the user should see is brief status updates between
+phases and the final deliverables at the end.
+
 ## Research Phases
 
 The research proceeds through 6 phases. Each phase uses the autonomous engine
 internally (work → cross-review → integrate → check convergence). The orchestrator
-advances to the next phase only when the current phase's deliverable is complete.
+advances to the next phase **immediately** when the current phase's deliverable is
+complete — no pausing, no asking, no confirmation requests.
 
 ---
 
@@ -289,14 +300,24 @@ The paper should read like it was written by this specific team of researchers.
 
 ## Phase Advancement
 
-The orchestrator advances to the next phase ONLY when:
+**Advance immediately. Never pause to ask the user.**
+
+The orchestrator advances to the next phase when:
 1. The current phase's deliverable is complete
 2. No panelist has raised an unresolved blocking concern
 3. The cross-review cycle has converged (no more substantive changes)
 
+When these conditions are met, proceed to the next phase IMMEDIATELY. Do not
+display the deliverable and wait. Do not ask "shall I proceed?" Do not ask
+"ready for Phase N?" Just go. Show a brief 2-3 line status update and continue.
+
+If phases are independent (e.g., Phase 3: Physics and Phase 4: Implementation
+can often run in parallel), launch them in parallel without asking.
+
 If a later phase reveals a problem with an earlier phase (e.g., coding reveals
-a model design flaw), the orchestrator **goes back** to the relevant phase with
-the new information. This is expected — research is not linear.
+a model design flaw), go back to the relevant phase automatically with the new
+information. This is expected — research is not linear. Do not ask permission
+to go back.
 
 ## Autonomous Work Engine
 
@@ -307,9 +328,12 @@ routes it to the most appropriate panelist.
 
 ### Operating Principles
 
-1. **No user questions.** Do NOT use AskUserQuestion during the work loop. The panel
-   is self-sufficient. If a panelist is uncertain about something, the orchestrator
-   routes the question to whichever panelist has the relevant expertise.
+1. **No user interaction.** Do NOT use AskUserQuestion at any point. Do NOT pause
+   to ask the user for confirmation, permission, or input. Do NOT ask "shall I
+   proceed?" or "ready for the next step?" The panel is fully self-sufficient.
+   If a panelist is uncertain, the orchestrator routes the question to whichever
+   panelist has the relevant expertise. If a decision must be made, the panel
+   debates and the orchestrator makes the call. Run to completion autonomously.
 2. **Goal-driven iteration.** The panel works in cycles until the objective is met,
    not for a fixed number of rounds. Each cycle produces concrete output (code, text,
    equations) that the next cycle improves.
