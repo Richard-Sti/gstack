@@ -52,8 +52,8 @@ Each panelist should consider (from their perspective):
 - **Sampler convergence:** Has the chain converged? R-hat, effective sample size, trace plots?
 - **Numerical precision:** Float32 vs float64 effects? Integration accuracy? Autodiff correctness?
 - **Look-elsewhere effect:** How many parameters/models were tried before settling on this one?
-- **Injection-recovery:** Generate mock data from the model, re-infer. Are true values recovered?
-- **Simulation-based calibration:** Do X% credible intervals contain the truth X% of the time?
+- **Injection-recovery (ENSEMBLE, not single mock):** Generate mock data from the model many times (≥100), re-infer each. The mean bias across all mocks must be consistent with zero. A single mock recovering within 2σ proves nothing — systematic bias is only revealed by the ensemble average. If mean bias > ~0.1-0.2σ (scaled by 1/sqrt(N_mocks)), the pipeline is biased.
+- **Simulation-based calibration:** Do X% credible intervals contain the truth X% of the time across all mocks? Are posterior widths calibrated (matching actual scatter)?
 
 {{CONVERSATION_ENGINE}}
 

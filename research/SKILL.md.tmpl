@@ -200,9 +200,23 @@ which need modification, and any errors found (with corrections).
 1. Choose true parameter values spanning the prior support
 2. Generate mock data from the forward model (with noise and selection)
 3. Run inference on each mock dataset
-4. Check: do X% credible intervals contain the truth X% of the time?
-5. Check: is the posterior mean/median systematically offset?
-6. Repeat ≥100 times for statistics
+4. Repeat ≥100 times to build statistics
+5. Check **ensemble** properties — NOT individual mocks:
+   - **Coverage:** Do X% credible intervals contain the truth X% of the time
+     across all mocks? Plot the P-P curve.
+   - **Bias:** Compute the mean bias (posterior mean minus truth) across all
+     mocks. This must be consistent with zero. A -1σ bias on a single mock
+     is meaningless — what matters is whether the AVERAGE across 100+ mocks
+     is biased. If the mean bias is more than ~0.1-0.2σ (scaled by 1/sqrt(N_mocks)),
+     the pipeline has a systematic problem.
+   - **Calibration:** The posterior uncertainty should match the actual scatter
+     of point estimates across mocks. If posteriors are too narrow, the pipeline
+     is overconfident. If too wide, it is conservative.
+
+**CRITICAL:** A single mock recovering the truth within 2σ does NOT validate
+the pipeline. The question is always: across many independent mocks, is the
+average offset from truth consistent with zero? Individual mocks will scatter
+— that is expected. Systematic bias is revealed only by the ensemble.
 
 **Additional validation:**
 - **HD:** Prior sensitivity (change priors, check if conclusions move).

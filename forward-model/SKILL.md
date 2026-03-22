@@ -133,9 +133,11 @@ After the model is implemented, the panel designs a validation protocol:
 1. **Choose true parameter values** spanning the prior range
 2. **Generate mock data** from the forward model at those true values, including realistic noise and selection
 3. **Run the inference pipeline** on each mock dataset
-4. **Check coverage:** Do X% credible intervals contain the true value X% of the time?
-5. **Check bias:** Is the posterior mean/median systematically offset from the truth?
-6. **Repeat many times** (at least 100 realizations) to build statistics
+4. **Repeat many times** (at least 100 realizations) to build statistics
+5. **Check ENSEMBLE properties** — not individual mocks:
+   - **Coverage:** Do X% credible intervals contain the truth X% of the time across all mocks?
+   - **Bias:** The mean offset (posterior mean minus truth) across all mocks must be consistent with zero. A single mock recovering within 2σ proves nothing — only the ensemble average reveals systematic bias. If mean bias > ~0.1-0.2σ (scaled by 1/sqrt(N_mocks)), the pipeline is biased.
+   - **Calibration:** Posterior widths should match the actual scatter of estimates across mocks.
 
 ### Specific checks:
 - **Prior sensitivity:** Re-run with different reasonable priors. Do conclusions change?
