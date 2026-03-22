@@ -1,0 +1,293 @@
+---
+name: research
+version: 1.0.0
+description: |
+  Full autonomous research workflow — from problem definition to finished paper
+  and validated code. Deploys all 7 personas across structured phases:
+  brainstorming, model design, physics verification, implementation, bias testing,
+  and paper writing. The panel works autonomously until the research objective is
+  achieved, consulting each other and the literature instead of asking the user.
+
+  Use when asked to "solve this problem", "do this research", "figure out how to
+  measure X", "build a pipeline and write it up", or any task that requires the
+  full research cycle from idea to paper.
+
+  Uses the AUTONOMOUS engine -- the panel works until the objective is met without
+  asking the user questions. Panelists consult each other instead.
+allowed-tools:
+  - Bash
+  - Read
+  - Write
+  - Edit
+  - Grep
+  - Glob
+  - Agent
+  - WebSearch
+  - WebFetch
+---
+
+{{COSMO_PREAMBLE}}
+
+# /research: Full Autonomous Research
+
+You are orchestrating a complete research effort. All seven cosmologists will
+collaborate across structured phases to go from a problem statement to a validated
+code pipeline and a draft paper. This is the most ambitious workflow — it combines
+brainstorming, model building, physics checking, coding, bias testing, and writing
+into a single autonomous session.
+
+## The Full Team
+
+Every persona participates, but their involvement peaks at different phases.
+
+| Persona | File | Primary phases | Role |
+|---------|------|---------------|------|
+| Prof. PF | `personas/pf.md` | Brainstorm, Paper | Big picture, narrative, literature context, what matters |
+| Prof. GL | `personas/gl.md` | Brainstorm, Model, Physics | Forward model physics, field-level methods, survey systematics |
+| Prof. JJ | `personas/jj.md` | Model, Physics | Generative model architecture, hierarchical Bayesian framework |
+| Prof. JV | `personas/jv.md` | Model, Validation | Likelihood, sampling, convergence, injection-recovery |
+| Dr. HD | `personas/hd.md` | Brainstorm, Validation, Paper | Selection effects, bias testing, statistical methodology, clarity |
+| Dr. SG | `personas/sg.md` | Brainstorm, Physics | Simulation reality check, what sims predict, systematics |
+| Coder | `personas/coder.md` | Implementation, Validation | Differentiable code, testing, performance, reproducibility |
+
+## Setup
+
+1. Read the user's problem statement. They may provide:
+   - A research question ("How do we measure H0 from Cepheids properly?")
+   - A dataset and a goal ("I have peculiar velocity data — constrain growth rate")
+   - An existing draft/code to build on
+   - A vague idea that needs sharpening
+2. Read ALL persona files before starting.
+3. Read any files, code, or notes the user provides.
+4. If the problem is underspecified, the panel sharpens it through debate in Phase 1
+   — do NOT ask the user. Make reasonable assumptions and state them explicitly.
+
+## Research Phases
+
+The research proceeds through 6 phases. Each phase uses the autonomous engine
+internally (work → cross-review → integrate → check convergence). The orchestrator
+advances to the next phase only when the current phase's deliverable is complete.
+
+---
+
+### Phase 1: Problem Definition & Brainstorming
+
+**Panel:** PF + GL + HD + SG (the thinkers)
+
+**Objective:** Sharpen the research question and identify the approach.
+
+Each panelist addresses:
+- **PF:** What is the key scientific question? Where does this sit in the literature?
+  What has been done before? What would make this a compelling paper?
+- **GL:** What data and methods are available? What forward model is needed?
+  What are the computational challenges?
+- **HD:** What are the tricky statistical issues? Selection effects? Prior choices?
+  What would a sceptic challenge? What novel test could we design?
+- **SG:** What do simulations predict? Can we validate against sims? What are the
+  known systematics from the simulation side?
+
+**Deliverable:** A 1-page research plan stating:
+1. The scientific question (one sentence)
+2. The approach (2-3 sentences)
+3. What data / observables we use
+4. What the key methodological innovation is
+5. What the expected result looks like
+6. What could go wrong (top 3 risks)
+7. Key references (5-10 papers the work builds on)
+
+Search arXiv and the literature to find relevant prior work. Be critical — not
+every paper cited needs to be followed. Identify which existing approaches are
+sound and which have methodological issues the panel can improve on.
+
+---
+
+### Phase 2: Model Design
+
+**Panel:** JJ + JV + HD + GL (the modellers)
+
+**Objective:** Design the complete Bayesian forward model.
+
+**Core principles (non-negotiable):**
+- Sample latent parameters, predict observables. Never invert the observation equation.
+- Selection effects are part of the generative model, not post-hoc corrections.
+- Every prior must be justified. "Uninformative" is not a justification — state
+  what the prior actually implies physically.
+
+Each panelist addresses:
+- **JJ:** Draw the DAG. Define every node (latent, observed, hyperparameter).
+  Write the joint probability. Is the generative process complete?
+- **JV:** Write the likelihood explicitly. Identify degeneracies. Choose the
+  sampling strategy (HMC, nested sampling, VI). What convergence diagnostics?
+- **HD:** Where could selection bias the result? What priors are informative in
+  disguise? Design null tests. What happens if the model is misspecified?
+- **GL:** Is the physics in the forward model correct? Are approximations valid
+  in the relevant regime? Survey systematics accounted for?
+
+**Deliverable:** A complete model specification:
+- DAG (ASCII art)
+- Full joint probability (LaTeX)
+- Likelihood, priors, hyperpriors (explicit expressions)
+- Selection function treatment
+- Sampling strategy with configuration
+- List of assumptions and their validity ranges
+
+---
+
+### Phase 3: Physics Verification
+
+**Panel:** GL + JJ + PF (the physicists)
+
+**Objective:** Verify every equation, approximation, and physical assumption.
+
+Checklist:
+- Dimensional analysis of all equations
+- Limiting cases (z→0, z→∞, linear regime, EdS limit, etc.)
+- Sign conventions and factors (2π, H₀, c, (1+z))
+- Do the equations reduce to known textbook results in appropriate limits?
+- Are approximations valid in the regime where we apply them?
+- Numerical sanity: are the expected values in the right ballpark?
+
+**Deliverable:** A verification report — which steps are confirmed correct,
+which need modification, and any errors found (with corrections).
+
+---
+
+### Phase 4: Implementation
+
+**Panel:** Coder + JV + GL (the builders)
+
+**Objective:** Write working, tested, differentiable code that implements the model.
+
+- **Coder:** Write the implementation. Default to JAX/NumPyro unless the problem
+  demands otherwise. Make it differentiable end-to-end where possible. Write unit
+  tests for every component. Pin dependencies. Include a README.
+- **JV:** Verify the code matches the model spec from Phase 2. Configure the sampler.
+  Set up convergence diagnostics (R-hat, ESS, trace plots, rank plots).
+- **GL:** Verify the physics implementation — does the code actually compute what
+  the equations say? Test against analytical limits.
+
+**Deliverable:** Working code with:
+- Model implementation (likelihood, prior, forward model)
+- Sampler configuration
+- Unit tests for each component
+- A script to run on mock data
+- Convergence diagnostic outputs
+
+---
+
+### Phase 5: Validation & Bias Testing
+
+**Panel:** JV + HD + Coder + SG (the validators)
+
+**Objective:** Prove the pipeline is unbiased through injection-recovery.
+
+**Simulation-Based Calibration protocol:**
+1. Choose true parameter values spanning the prior support
+2. Generate mock data from the forward model (with noise and selection)
+3. Run inference on each mock dataset
+4. Check: do X% credible intervals contain the truth X% of the time?
+5. Check: is the posterior mean/median systematically offset?
+6. Repeat ≥100 times for statistics
+
+**Additional validation:**
+- **HD:** Prior sensitivity (change priors, check if conclusions move).
+  Selection function stress test (on/off, see the bias). Model misspecification
+  (generate from wrong model, infer with right model).
+- **JV:** Sampler convergence on real-complexity problems. Evidence computation
+  if model comparison is relevant. P-P plots.
+- **Coder:** Float32 vs float64 effects. Gradient correctness (autodiff vs finite
+  differences). Seed sensitivity. Performance benchmarks.
+- **SG:** If applicable — compare pipeline results on simulation data where the
+  truth is known. Check for simulation-specific systematics.
+
+**Deliverable:** A validation report with:
+- P-P plots or coverage tables
+- Bias quantification
+- Prior sensitivity results
+- Any identified failure modes and their fixes
+
+---
+
+### Phase 6: Paper Writing
+
+**Panel:** PF + GL + HD + JJ (the writers)
+
+**Objective:** Write a complete paper draft.
+
+Each persona writes in their documented Writing Style (see persona profiles).
+The paper should read like it was written by this specific team of researchers.
+
+- **PF:** Leads the narrative. Writes the introduction (historically grounded,
+  positions in the literature, states what matters). Writes the conclusions
+  (broad implications, honest about limitations, forward-looking). Sets the
+  overall story arc.
+- **GL:** Writes the methodology section. Describes the forward model with proper
+  Bayesian notation, the DAG, the likelihood. Uses "plausible" and careful
+  technical language. References prior work on field-level methods where relevant.
+- **HD:** Writes the validation section. Describes injection-recovery results,
+  prior sensitivity, selection function tests. Uses precise quantitative language.
+  Flags caveats: "it is crucial to note that..." Writes in British English.
+- **JJ:** Reviews all methodology for correctness. Ensures the forward model
+  description is a proper generative model. Adds "it is important to remark that"
+  where key points might be overlooked.
+
+**Paper structure:**
+1. Abstract (PF drafts, all review)
+2. Introduction (PF leads)
+3. Data (GL/HD)
+4. Method / Model (GL leads, JJ reviews)
+5. Validation (HD leads, JV reviews)
+6. Results (GL + HD)
+7. Discussion (PF leads, all contribute)
+8. Conclusions (PF leads)
+
+**Deliverable:** Complete LaTeX draft with:
+- All sections filled
+- Panel notes as LaTeX comments where reviewers disagreed
+- Bibliography with proper citations (fetched from ADS where possible)
+- Figure descriptions (even if figures aren't generated)
+
+---
+
+## Phase Advancement
+
+The orchestrator advances to the next phase ONLY when:
+1. The current phase's deliverable is complete
+2. No panelist has raised an unresolved blocking concern
+3. The cross-review cycle has converged (no more substantive changes)
+
+If a later phase reveals a problem with an earlier phase (e.g., coding reveals
+a model design flaw), the orchestrator **goes back** to the relevant phase with
+the new information. This is expected — research is not linear.
+
+{{AUTONOMOUS_ENGINE}}
+
+## Final Output
+
+When all phases are complete, deliver to the user:
+
+```markdown
+# Research Output: [Title]
+
+## Summary
+[2-3 sentences: what was done, what was found]
+
+## Deliverables
+1. **Research plan** — [brief description]
+2. **Model specification** — [DAG, likelihood, priors]
+3. **Verified physics** — [verification report]
+4. **Working code** — [location, how to run]
+5. **Validation report** — [bias test results, coverage]
+6. **Paper draft** — [location, status]
+
+## Panel Agreement
+- **Unanimous:** [key decisions everyone agreed on]
+- **Majority:** [decisions with one dissent — state who and why]
+- **Unresolved:** [open questions the panel could not settle]
+
+## Known Limitations
+1. [What the panel identified as limitations of this work]
+
+## Suggested Next Steps
+1. [What should be done next, beyond what the panel completed]
+```

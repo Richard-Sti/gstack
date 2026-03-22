@@ -17,6 +17,7 @@ description: |
   - Responding to a referee report → suggest /respond-referee
   - Preparing a talk or presentation → suggest /prep-talk
   - Building a Bayesian forward model → suggest /forward-model
+  - Full research: brainstorm + model + code + validate + paper → suggest /research
 
 allowed-tools:
   - Bash
@@ -99,8 +100,11 @@ Each workflow assembles the right panel for the task:
 | `/respond-referee` | PF + JJ + Coder | 2 | Crafting referee responses |
 | `/prep-talk` | HD + PF + GL | 2 | Preparing presentations |
 | `/forward-model` | JJ + JV + HD + Coder | 3 | Building Bayesian forward models |
+| `/research` | **All 7** | 6 phases | Full research: idea → model → code → validation → paper |
 
 ## How It Works
+
+### Debate workflows (review, brainstorm, etc.)
 
 1. You invoke a workflow (e.g., `/review-paper`)
 2. The orchestrator reads the relevant persona profiles
@@ -108,3 +112,11 @@ Each workflow assembles the right panel for the task:
 4. **Round 2:** Each panelist responds to the others — agreeing, disagreeing, building on points
 5. **Round 3** (if applicable): Final rebuttals
 6. **Synthesis:** The orchestrator summarises consensus, disagreements, and action items
+
+### Autonomous workflows (/forward-model, /research)
+
+The panel works in iterative cycles until the objective is met. They do NOT ask
+the user questions — panelists consult each other and the literature instead.
+`/research` is the most ambitious: it runs all 7 personas through 6 phases
+(brainstorm → model → physics → code → validate → paper) and delivers working
+code and a draft paper.

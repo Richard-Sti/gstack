@@ -377,6 +377,7 @@ function findTemplates(): string[] {
     'respond-referee',
     'prep-talk',
     'forward-model',
+    'research',
   ];
 
   for (const w of workflows) {

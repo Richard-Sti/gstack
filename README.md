@@ -41,8 +41,19 @@ These workflows use a different engine: the panel works in iterative cycles (up 
 | Command | Panel | Best for |
 |---------|-------|----------|
 | `/forward-model` | JJ + JV + HD + Coder | Building Bayesian forward models with proper selection effects |
+| `/research` | **All 7 personas** | Full research cycle: idea → model → code → validation → paper |
 
 The `/forward-model` workflow enforces a core principle: **sample latent parameters, always predict observables** (magnitudes, redshifts, fluxes — never distances), and properly account for selection effects. It includes a structured bias-test phase with injection-recovery validation. References: Kelly+2008, Stiskalek+2026.
+
+The `/research` workflow is the most ambitious — it deploys all 7 personas across 6 structured phases:
+1. **Brainstorm** (PF + GL + HD + SG) — sharpen the question, survey the literature
+2. **Model design** (JJ + JV + HD + GL) — DAG, likelihood, priors, selection
+3. **Physics verification** (GL + JJ + PF) — dimensional analysis, limiting cases, correctness
+4. **Implementation** (Coder + JV + GL) — working, tested, differentiable code
+5. **Validation** (JV + HD + Coder + SG) — injection-recovery, prior sensitivity, bias tests
+6. **Paper writing** (PF + GL + HD + JJ) — complete LaTeX draft in each persona's authentic voice
+
+The panel can go back to earlier phases if later work reveals issues — research is not linear.
 
 ## Install
 
@@ -105,13 +116,24 @@ Type the slash command and provide your material:
 > periods, metallicities. Selection: magnitude-limited sample.
 ```
 
-The panel (JJ + JV + HD + Coder) will work autonomously through up to 5 cycles:
+The panel (JJ + JV + HD + Coder) works autonomously through up to 5 cycles:
 1. Design the DAG and generative model
 2. Construct the likelihood, choose and justify priors
 3. Cross-review each other's work, search arXiv for relevant methods
 4. Write implementation code (JAX/NumPyro or Julia/Turing.jl)
 5. Design injection-recovery validation tests
 6. Return the complete model specification, code, and validation plan
+
+### Full autonomous research
+
+```
+> /research
+> I want to properly measure the local bulk flow from peculiar velocity data.
+> The key challenge is accounting for selection effects in the magnitude-limited
+> catalogue and the inhomogeneous Malmquist bias.
+```
+
+All 7 personas work through 6 phases — brainstorming the approach, designing the forward model, verifying the physics, writing code, running bias tests, and drafting the paper. They consult each other and search arXiv for relevant methods. You get back working code, a validation report, and a paper draft.
 
 ## How it works
 

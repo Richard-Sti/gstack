@@ -30,6 +30,7 @@ cosmo-panel/
 ├── respond-referee/   # /respond-referee workflow
 ├── prep-talk/         # /prep-talk workflow
 ├── forward-model/     # /forward-model workflow (Bayesian forward modeling)
+├── research/          # /research workflow (full research: idea → paper + code)
 ├── scripts/           # Build tooling
 │   └── gen-skill-docs.ts  # Template → SKILL.md generator
 ├── SKILL.md           # Generated root skill (don't edit directly)
