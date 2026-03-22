@@ -297,7 +297,8 @@ When converged (or after max cycles), produce:
 # Forward Model Specification: [Analysis Name]
 
 ## Directed Acyclic Graph
-[ASCII art or description of the generative model DAG]
+[TikZ figure with plate notation: observed nodes shaded, latent nodes open,
+plates for repeated structure. Write as standalone .tex file.]
 
 ## Observables
 - [List of observed quantities with their error models]

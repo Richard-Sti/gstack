@@ -135,7 +135,11 @@ Each panelist addresses:
   in the relevant regime? Survey systematics accounted for?
 
 **Deliverable:** A complete model specification:
-- DAG (ASCII art)
+- DAG as a TikZ figure (publication-ready, using `\tikz` with plate notation:
+  observed nodes shaded, latent nodes open, plates for repeated structure,
+  hyperparameters outside plates). Write this as a standalone `.tex` file that
+  can be `\input{}` into the paper. Use standard graphical model conventions
+  (Bishop 2006 style).
 - Full joint probability (LaTeX)
 - Likelihood, priors, hyperpriors (explicit expressions)
 - Selection function treatment
@@ -233,8 +237,9 @@ The paper should read like it was written by this specific team of researchers.
   (broad implications, honest about limitations, forward-looking). Sets the
   overall story arc.
 - **GL:** Writes the methodology section. Describes the forward model with proper
-  Bayesian notation, the DAG, the likelihood. Uses "plausible" and careful
-  technical language. References prior work on field-level methods where relevant.
+  Bayesian notation, the likelihood, and priors. Includes the TikZ DAG figure
+  from Phase 2 (refine it if the model changed during implementation). Uses
+  "plausible" and careful technical language. References prior work where relevant.
 - **HD:** Writes the validation section. Describes injection-recovery results,
   prior sensitivity, selection function tests. Uses precise quantitative language.
   Flags caveats: "it is crucial to note that..." Writes in British English.
@@ -256,7 +261,8 @@ The paper should read like it was written by this specific team of researchers.
 - All sections filled
 - Panel notes as LaTeX comments where reviewers disagreed
 - Bibliography with proper citations (fetched from ADS where possible)
-- Figure descriptions (even if figures aren't generated)
+- TikZ DAG figure of the generative model (standalone `.tex` file)
+- Figure descriptions for any additional figures (even if not generated)
 
 ---
 
